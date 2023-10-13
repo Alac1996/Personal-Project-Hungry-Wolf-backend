@@ -2,7 +2,6 @@ const Joi = require("joi");
 
 const registerSchema = Joi.object({
   username: Joi.string().trim().required(),
-  email: Joi.string().email().required(),
   password: Joi.string()
     .pattern(/^[a-zA-Z0-9]{6,30}$/)
     .trim()
@@ -12,6 +11,19 @@ const registerSchema = Joi.object({
     .trim()
     .required()
     .strip(),
+  email: Joi.string().email().required(),
+  phone_No: Joi.string()
+    .pattern(/^[0-9]{10}$/)
+    .required(),
+  Address: Joi.string().required().strip(),
 });
 
-exports.registerSchema = registerSchema;
+const loginSchema = Joi.object({
+  username: Joi.string().trim().required(),
+  password: Joi.string()
+    .pattern(/^[a-zA-Z0-9]{6,30}$/)
+    .trim()
+    .required(),
+});
+
+exports.Schema = { registerSchema, loginSchema };

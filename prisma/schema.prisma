@@ -11,18 +11,71 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  username String @unique @db.VarChar(20)
-  email    String @unique
-  password String
-  Todos    Todo[]
+  id           Int         @id @default(autoincrement())
+  username     String      @unique @db.VarChar(20)
+  password     String
+  phone_No     String
+  Address      String
+  email        String      @unique
+  profileImage String?
+  Orders       Order[]
+  Cart_Items   Cart_Item[]
 }
 
-model Todo {
-  id        Int      @id @default(autoincrement())
-  title     String
-  completed Boolean  @default(false)
-  dueDate   DateTime @default(now())
+model Order {
+  id                 Int            @id @default(autoincrement())
+  order_date_time    DateTime       @default(now())
+  delivery_date_time DateTime       @default(now())
+  totalPrice         Decimal
+  userId             Int
+  user               User           @relation(fields: [userId], references: [id])
+  ProductOrder       ProductOrder[]
+  Payment            Payment?
+}
+
+model Product {
+  id            Int            @id @default(autoincrement())
+  product_Name  String
+  description   String
+  price         Decimal
+  categoryId    Int
+  ProductOrders ProductOrder[]
+  Cart_Items    Cart_Item[]
+}
+
+model ProductOrder {
+  id        Int     @id @default(autoincrement())
+  quantity  Int
+  price     Decimal
+  orderId   Int
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Payment {
+  id      Int         @id @default(autoincrement())
+  type    PaymentType
+  date    DateTime    @default(now())
+  orderId Int         @unique
+  order   Order       @relation(fields: [orderId], references: [id])
+}
+
+model Cart_Item {
+  id        Int     @id @default(autoincrement())
+  quantity  Int
   userId    Int
-  user      User     @relation(fields: [userId], references: [id])
+  user      User    @relation(fields: [userId], references: [id])
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+enum PaymentType {
+  COD
+  QR
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String
 }
