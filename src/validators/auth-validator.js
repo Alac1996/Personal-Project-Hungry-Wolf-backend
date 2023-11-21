@@ -15,7 +15,7 @@ const registerSchema = Joi.object({
   phone_No: Joi.string()
     .pattern(/^[0-9]{10}$/)
     .required(),
-  Address: Joi.string().required().strip(),
+  address: Joi.string().required(),
 });
 
 const loginSchema = Joi.object({

@@ -15,9 +15,10 @@ model User {
   username     String      @unique @db.VarChar(20)
   password     String
   phone_No     String
-  Address      String
+  address      String
   email        String      @unique
   profileImage String?
+  isAdmin      Boolean     @default(false)
   Orders       Order[]
   Cart_Items   Cart_Item[]
 }
@@ -38,9 +39,30 @@ model Product {
   product_Name  String
   description   String
   price         Decimal
-  categoryId    Int
+  category      categoryType
+  crust         crustType      @default(null)
+  size          sizeType       @default(null)
+  image         String
   ProductOrders ProductOrder[]
   Cart_Items    Cart_Item[]
+}
+
+enum categoryType {
+  pizza
+  sideDish
+  beverage
+}
+
+enum crustType {
+  Thick_soft
+  Thin_crispy
+  null
+}
+
+enum sizeType {
+  Medium
+  Large
+  null
 }
 
 model ProductOrder {
@@ -59,6 +81,7 @@ model Payment {
   date    DateTime    @default(now())
   orderId Int         @unique
   order   Order       @relation(fields: [orderId], references: [id])
+  slip    String?
 }
 
 model Cart_Item {
